@@ -4,732 +4,124 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bank of Wisdom - Digital Library</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary: #0f3460;
-            --secondary: #1a1a2e;
-            --accent: #e94560;
-            --light: #f5f5f5;
-            --dark: #111111;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh;
-            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
-            color: #eee;
-            overflow-x: hidden;
-        }
-
-        /* Welcome Animation */
-        .welcome-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            opacity: 1;
-            transition: opacity 2s ease-in-out;
-        }
-
-        .welcome-logo {
-            font-size: 3.5rem;
-            margin-bottom: 2rem;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        .welcome-text {
-            font-size: 1.8rem;
-            text-align: center;
-            color: var(--accent);
-            margin-bottom: 3rem;
-            animation: fadeInUp 1s ease-in-out;
-        }
-
-        .welcome-spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid rgba(233, 69, 96, 0.3);
-            border-top-color: var(--accent);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Login Portal */
-        .login-container {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 2.5rem;
-            width: 90%;
-            max-width: 400px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            z-index: 999;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        }
-
-        .login-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .login-header h2 {
-            font-size: 2rem;
-            color: var(--accent);
-            margin-bottom: 0.5rem;
-        }
-
-        .login-header p {
-            color: #ccc;
-            font-size: 0.95rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #eee;
-            font-weight: 500;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.05);
-            color: #fff;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--accent);
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .form-group input::placeholder {
-            color: rgba(255, 255, 255, 0.4);
-        }
-
-        .btn {
-            width: 100%;
-            padding: 0.9rem;
-            background: linear-gradient(135deg, var(--accent) 0%, #c2185b 100%);
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(233, 69, 96, 0.3);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        /* Main App */
-        .app-container {
-            display: none;
-            min-height: 100vh;
-            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
-        }
-
-        .app-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .app-header h1 {
-            font-size: 1.8rem;
-            color: var(--accent);
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .user-avatar {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(45deg, var(--accent), #c2185b);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 1.5rem;
-        }
-
-        .logout-btn {
-            background: rgba(233, 69, 96, 0.2);
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            color: #fff;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        .logout-btn:hover {
-            background: rgba(233, 69, 96, 0.3);
-        }
-
-        .app-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 3rem;
-        }
-
-        .stat-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 1.5rem;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .stat-card .number {
-            font-size: 2.5rem;
-            color: var(--accent);
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-card .label {
-            color: #888;
-            font-size: 0.9rem;
-        }
-
-        .section-title {
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .section-title::before {
-            content: '';
-            width: 4px;
-            height: 20px;
-            background: var(--accent);
-            border-radius: 2px;
-        }
-
-        .upload-section {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            text-align: center;
-        }
-
-        .upload-area {
-            border: 2px dashed rgba(233, 69, 96, 0.5);
-            border-radius: 8px;
-            padding: 2rem;
-            background: rgba(255, 255, 255, 0.02);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .upload-area:hover {
-            border-color: var(--accent);
-            background: rgba(233, 69, 96, 0.05);
-        }
-
-        .upload-area::before {
-            content: '📁';
-            font-size: 3rem;
-            display: block;
-            margin-bottom: 1rem;
-        }
-
-        .upload-area p {
-            color: #888;
-            margin-bottom: 0.5rem;
-        }
-
-        .upload-area input {
-            display: none;
-        }
-
-        .files-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .file-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 1.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: transform 0.3s ease;
-        }
-
-        .file-card:hover {
-            transform: translateX(5px);
-        }
-
-        .file-info {
-            flex: 1;
-        }
-
-        .file-name {
-            font-weight: 600;
-            margin-bottom: 0.3rem;
-        }
-
-        .file-size {
-            font-size: 0.8rem;
-            color: #888;
-        }
-
-        .file-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .action-btn {
-            width: 32px;
-            height: 32px;
-            border-radius: 6px;
-            border: none;
-            background: rgba(233, 69, 96, 0.2);
-            color: #fff;
-            cursor: pointer;
-            transition: background 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .action-btn:hover {
-            background: rgba(233, 69, 96, 0.3);
-        }
-
-        .delete-btn {
-            background: rgba(220, 53, 69, 0.2);
-        }
-
-        .delete-btn:hover {
-            background: rgba(220, 53, 69, 0.3);
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .welcome-text {
-                font-size: 1.3rem;
-            }
-
-            .welcome-logo {
-                font-size: 2.5rem;
-            }
-
-            .login-container {
-                padding: 1.8rem;
-                width: 95%;
-            }
-
-            .app-header {
-                flex-direction: column;
-                gap: 1rem;
-                padding: 1.5rem;
-            }
-
-            .app-content {
-                padding: 1rem;
-            }
-
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .file-card {
-                flex-direction: column;
-                gap: 0.8rem;
-            }
-
-            .file-actions {
-                align-self: flex-end;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .welcome-text {
-                font-size: 1rem;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .user-info {
-                flex-wrap: wrap;
-            }
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.5s ease-in-out;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Welcome Animation -->
     <div class="welcome-screen" id="welcomeScreen">
-        <div class="welcome-logo">📚</div>
-        <div class="welcome-text">Bank of Wisdom Digital Library</div>
+        <div class="welcome-logo">📚茳</div>
+        <div class="welcome-text">Welcome to Bank of Wisdom</div>
         <div class="welcome-spinner"></div>
     </div>
 
-    <!-- Login Portal -->
     <div class="login-container" id="loginContainer">
         <div class="login-header">
-            <h2>Welcome Back</h2>
-            <p>Please login to continue</p>
+            <h2>Sign In</h2>
+            <p>Enter your username to access your digital library</p>
         </div>
-        <form id="loginForm">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" placeholder="Enter your username" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" placeholder="Enter your password" required>
-            </div>
-            <button type="submit" class="btn">Login</button>
-        </form>
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" placeholder="Enter your name..." />
+        </div>
+        <button class="btn" id="loginBtn">Enter Library</button>
     </div>
 
-    <!-- Main App -->
     <div class="app-container" id="appContainer">
         <header class="app-header">
             <h1>Bank of Wisdom</h1>
             <div class="user-info">
-                <span id="usernameDisplay"></span>
-                <div class="user-avatar" id="userAvatar">U</div>
-                <div class="logout-btn" id="logoutBtn">Logout</div>
+                <span id="userName" class="user-avatar"></span>
+                <button class="logout-btn" id="logoutBtn">Logout</button>
             </div>
         </header>
 
         <main class="app-content">
-            <!-- Statistics -->
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="number" id="fileCount">0</div>
+                    <div class="number" id="totalFiles">0</div>
                     <div class="label">Total Files</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number" id="totalCategories">3</div>
+                    <div class="label">Categories</div>
                 </div>
                 <div class="stat-card">
                     <div class="number" id="totalSize">0 MB</div>
                     <div class="label">Total Size</div>
                 </div>
-                <div class="stat-card">
-                    <div class="number" id="uploadCount">0</div>
-                    <div class="label">Today' + "'s Uploads</div>
+            </div>
+
+            <div class="search-section">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search files..." />
+                    <button class="btn" id="searchBtn">Search</button>
+                </div>
+                <div class="advanced-search">
+                    <select id="categoryFilter">
+                        <option value="">All Categories</option>
+                        <option value="books">Books</option>
+                        <option value="documents">Documents</option>
+                        <option value="media">Media</option>
+                    </select>
+                    <input type="text" id="authorFilter" placeholder="Author/Creator" />
                 </div>
             </div>
 
-            <!-- Upload Section -->
-            <section class="upload-section">
-                <h2 class="section-title">Upload Files</h2>
-                <div class="upload-area" id="uploadArea">
-                    <p>Click or drag files to upload</p>
-                    <input type="file" id="fileInput" multiple>
+            <div class="categories-section">
+                <h2 class="section-title">Categories</h2>
+                <div class="categories-grid" id="categoriesGrid">
+                    <div class="category-card active" data-category="">
+                        <div>All Files</div>
+                        <div class="num-items" id="cat-all">0</div>
+                    </div>
+                    <div class="category-card" data-category="books">
+                        <div>Books</div>
+                        <div class="num-items" id="cat-books">0</div>
+                    </div>
+                    <div class="category-card" data-category="documents">
+                        <div>Documents</div>
+                        <div class="num-items" id="cat-docs">0</div>
+                    </div>
+                    <div class="category-card" data-category="media">
+                        <div>Media</div>
+                        <div class="num-items" id="cat-media">0</div>
+                    </div>
                 </div>
-            </section>
+            </div>
 
-            <!-- Files Grid -->
-            <section>
-                <h2 class="section-title">Your Files</h2>
-                <div class="files-grid" id="filesGrid">
-                    <!-- Files will be added here -->
+            <div class="upload-section">
+                <h2 class="section-title">Upload Files</h2>
+                <label class="upload-area" for="fileInput">
+                    <input type="file" id="fileInput" class="file-input" multiple />
+                    <div class="upload-icon">📊</div>
+                    <div class="upload-text">Click to upload files</div>
+                    <div class="upload-hint">No file size limits</div>
+                </label>
+            </div>
+
+            <h2 class="section-title">Your Files</h2>
+            <div class="files-grid" id="filesGrid">
+                <div class="no-files">
+                    <p>No files uploaded yet</p>
                 </div>
-            </section>
+            </div>
         </main>
     </div>
 
-    <script>
-        // Simulated user database
-        const users = {
-            'admin': 'admin123',
-            'user': 'password',
-            'library': 'lib2024'
-        };
+    <div class="upload-modal" id="previewModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">File Info</h3>
+                <button class="close-modal" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="modalInfo"></p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn" id="downloadModalBtn">Download</button>
+            </div>
+        </div>
+    </div>
 
-        // App state
-        let currentState = {
-            user: null,
-            files: [],
-            uploadCount: 0
-        };
-
-        // DOM Elements
-        const welcomeScreen = document.getElementById('welcomeScreen');
-        const loginContainer = document.getElementById('loginContainer');
-        const appContainer = document.getElementById('appContainer');
-        const loginForm = document.getElementById('loginForm');
-        const fileInput = document.getElementById('fileInput');
-        const uploadArea = document.getElementById('uploadArea');
-        const filesGrid = document.getElementById('filesGrid');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const usernameDisplay = document.getElementById('usernameDisplay');
-        const userAvatar = document.getElementById('userAvatar');
-        const fileCountEl = document.getElementById('fileCount');
-        const totalSizeEl = document.getElementById('totalSize');
-        const uploadCountEl = document.getElementById('uploadCount');
-
-        // Welcome Animation
-        setTimeout(() => {
-            welcomeScreen.style.opacity = '0';
-            setTimeout(() => {
-                welcomeScreen.style.display = 'none';
-            }, 1000);
-        }, 3000);
-
-        // Handle Login
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-
-            if (users[username] && users[username] === password) {
-                currentState.user = username;
-                showApp();
-                loadUserData();
-            } else {
-                alert('Invalid credentials! Try: admin/admin123 or user/password');
-            }
-        });
-
-        // Show App
-        function showApp() {
-            loginContainer.style.display = 'none';
-            appContainer.style.display = 'block';
-            appContainer.classList.add('fade-in');
-            
-            usernameDisplay.textContent = username.charAt(0).toUpperCase() + username.slice(1);
-            userAvatar.textContent = username.charAt(0).toUpperCase();
-        }
-
-        // Load User Data (simulated)
-        function loadUserData() {
-            // Load files from localStorage
-            const savedFiles = localStorage.getItem('libraryFiles_' + username);
-            if (savedFiles) {
-                currentState.files = JSON.parse(savedFiles);
-            }
-            
-            // Load upload count
-            const savedUploads = localStorage.getItem('libraryUploads_' + username);
-            if (savedUploads) {
-                currentState.uploadCount = parseInt(savedUploads);
-            }
-            
-            updateStats();
-            renderFiles();
-        }
-
-        // Update Statistics
-        function updateStats() {
-            fileCountEl.textContent = currentState.files.length;
-            
-            const totalSize = currentState.files.reduce((sum, file) => sum + file.size, 0);
-            const sizeMB = (totalSize / (1024 * 1024)).toFixed(2);
-            totalSizeEl.textContent = sizeMB + ' MB';
-            
-            uploadCountEl.textContent = currentState.uploadCount;
-        }
-
-        // Render Files
-        function renderFiles() {
-            filesGrid.innerHTML = '';
-            
-            if (currentState.files.length === 0) {
-                filesGrid.innerHTML = '<p style="color: #888; grid-column: 1 / -1; text-align: center;">No files uploaded yet.</p>';
-                return;
-            }
-
-            currentState.files.forEach(file => {
-                const fileCard = document.createElement('div');
-                fileCard.className = 'file-card fade-in';
-                fileCard.innerHTML = `
-                    <div class="file-info">
-                        <div class="file-name">' + file.name + '</div>
-                        <div class="file-size">' + formatSize(file.size) + '</div>
-                    </div>
-                    <div class="file-actions">
-                        <button class="action-btn download-btn" onclick="downloadFile(\"' + file.id + '\")" title="Download">
-                            ⬇
-                        </button>
-                        <button class="action-btn delete-btn" onclick="deleteFile(\"' + file.id + '\")" title="Delete">
-                            🗑
-                        </button>
-                    </div>
-                `;
-                filesGrid.appendChild(fileCard);
-            });
-        }
-
-        // Format File Size
-        function formatSize(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        }
-
-        // Upload File
-        function uploadFile(files) {
-            Array.from(files).forEach(file => {
-                const fileId = Date.now() + '-' + Math.random().toString(36).substr(2, 9);
-                currentState.files.push({
-                    id: fileId,
-                    name: file.name,
-                    size: file.size,
-                    uploaded: new Date().toISOString()
-                });
-            });
-            
-            currentState.uploadCount++;
-            saveUserData();
-            updateStats();
-            renderFiles();
-        }
-
-        // Delete File
-        function deleteFile(id) {
-            currentState.files = currentState.files.filter(file => file.id !== id);
-            saveUserData();
-            updateStats();
-            renderFiles();
-        }
-
-        // Download File
-        function downloadFile(id) {
-            const file = currentState.files.find(f => f.id === id);
-            if (file) {
-                alert('Download initiated for: ' + file.name + '\n\n(Note: In a real app, this would trigger actual file download.)');
-            }
-        }
-
-        // Save User Data
-        function saveUserData() {
-            localStorage.setItem('libraryFiles_' + currentState.user, JSON.stringify(currentState.files));
-            localStorage.setItem('libraryUploads_' + currentState.user, currentState.uploadCount.toString());
-        }
-
-        // Event Listeners
-        fileInput.addEventListener('change', (e) => {
-            uploadFile(e.target.files);
-        });
-
-        uploadArea.addEventListener('click', () => {
-            fileInput.click();
-        });
-
-        uploadArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadArea.style.borderColor = '#e94560';
-        });
-
-        uploadArea.addEventListener('dragleave', (e) => {
-            e.preventDefault();
-            uploadArea.style.borderColor = 'rgba(233, 69, 96, 0.5)';
-        });
-
-        uploadArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadArea.style.borderColor = 'rgba(233, 69, 96, 0.5)';
-            uploadFile(e.dataTransfer.files);
-        });
-
-        logoutBtn.addEventListener('click', () => {
-            currentState = { user: null, files: [], uploadCount: 0 };
-            localStorage.removeItem('libraryFiles_' + currentState.user);
-            localStorage.removeItem('libraryUploads_' + currentState.user);
-            
-            document.getElementById('username').value = '';
-            document.getElementById('password').value = '';
-            loginContainer.style.display = 'block';
-            appContainer.style.display = 'none';
-        });
-
-        // Initialize with demo
-        document.addEventListener('DOMContentLoaded', () => {
-            // Show demo login info
-            const demoMsg = 'Demo: Try admin/admin123 or user/password';
-            console.log(demoMsg);
-        });
-    </script>
+    <script src="app.js"></script>
 </body>
 </html>
