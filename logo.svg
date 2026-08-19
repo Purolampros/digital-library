@@ -3,9 +3,16 @@
   <!-- Background -->
   <defs>
     <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FF6B35" />
-      <stop offset="100%" stop-color="#F7931E" />
+      <stop offset="0%" stop-color="#4A90E2" />
+      <stop offset="100%" stop-color="#50C9C3" />
     </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/> 
+        <feMergeNode in="SourceGraphic"/> 
+      </feMerge>
+    </filter>
   </defs>
 
   <!-- Circular background -->
