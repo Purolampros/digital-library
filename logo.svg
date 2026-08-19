@@ -1,42 +1,7 @@
-<!-- Bank of Wisdom Logo with BOW Acronym -->
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" width="200" height="220">
-  <!-- Background -->
-  <defs>
-    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#4A90E2" />
-      <stop offset="100%" stop-color="#50C9C3" />
-    </linearGradient>
-    <filter id="glow">
-      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-      <feMerge> 
-        <feMergeNode in="coloredBlur"/> 
-        <feMergeNode in="SourceGraphic"/> 
-      </feMerge>
-    </filter>
-  </defs>
-
-  <!-- Circular background -->
-  <circle cx="100" cy="105" r="95" fill="url(#gradient)" />
-
-  <!-- Inner circle (white) -->
-  <circle cx="100" cy="105" r="70" fill="white" />
-
-  <!-- Open book icon -->
-  <path d="M 70 95 L 70 115 L 80 115 L 80 95 Z" fill="#2E86AB" />
-  <path d="M 80 95 L 80 115 L 120 115 L 120 95 Z" fill="#FFFFFF" />
-  <path d="M 90 115 L 90 130 L 110 130 L 110 115 Z" fill="#A23B72" />
-  <path d="M 120 95 L 120 115 L 130 115 L 130 95 Z" fill="#2E86AB" />
-
-  <!-- BOW Acronym inside the circle -->
-  <text x="100" y="105" text-anchor="middle" font-family="Arial, sans-serif" font-size="36" font-weight="bold" fill="#2E86AB" dominant-baseline="middle">BOW</text>
-
-  <!-- Sparkle effects (stars representing wisdom) -->
-  <circle cx="50" cy="50" r="5" fill="#FFD23F" />
-  <circle cx="150" cy="50" r="4" fill="#FFD23F" />
-  <circle cx="150" cy="155" r="3" fill="#FFD23F" />
-  <circle cx="50" cy="155" r="4" fill="#FFD23F" />
-
-  <!-- Text below icon -->
-  <text x="100" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#2D3142">BANK OF WISDOM</text>
-  <text x="100" y="210" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#666666">DIGITAL LIBRARY</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="16" fill="#6f63ff"/>
+  <path d="M18 18h18a10 10 0 0 1 10 10v18H28a10 10 0 0 1-10-10V18Z" fill="#ffffff" opacity=".95"/>
+  <path d="M28 18h10a10 10 0 0 1 10 10v10H38a10 10 0 0 1-10-10V18Z" fill="#ffd166"/>
+  <path d="M32 24v12" stroke="#1a1a2e" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M27 30h10" stroke="#1a1a2e" stroke-width="2.5" stroke-linecap="round"/>
 </svg>
