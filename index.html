@@ -1,1 +1,70 @@
-<updated HTML content>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#1a1a2e">
+  <meta name="description" content="Your personal digital library — add, search and track your books.">
+  <title>Digital Library</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Welcome animation overlay -->
+  <div id="welcome" class="welcome" aria-hidden="false">
+    <div class="welcome-inner">
+      <img src="logo.svg" alt="" class="welcome-logo">
+      <h1 class="welcome-title">Digital Library</h1>
+      <p class="welcome-tag">Your books, all in one place</p>
+      <button id="skipWelcome" class="welcome-skip" type="button">Skip intro</button>
+    </div>
+  </div>
+
+  <header class="app-header">
+    <img src="logo.svg" alt="" class="brand-logo">
+    <h1 class="brand">Digital Library</h1>
+  </header>
+
+  <main class="app">
+    <section class="card" aria-labelledby="add-title">
+      <h2 id="add-title" class="section-title">Add a book</h2>
+      <form id="addForm" class="add-form">
+        <input type="text" id="title" placeholder="Book title" required autocomplete="off">
+        <input type="text" id="author" placeholder="Author" required autocomplete="off">
+        <select id="genre" aria-label="Genre">
+          <option value="">Genre…</option>
+        </select>
+        <select id="status" aria-label="Reading status">
+          <option value="unread">Unread</option>
+          <option value="reading">Reading</option>
+          <option value="read">Read</option>
+        </select>
+        <button type="submit" class="primary">Add book</button>
+      </form>
+    </section>
+
+    <section class="card controls" aria-label="Search and filter">
+      <input type="search" id="search" placeholder="Search title or author…" aria-label="Search books">
+      <select id="filterGenre" aria-label="Filter by genre">
+        <option value="">All genres</option>
+      </select>
+      <select id="filterStatus" aria-label="Filter by status">
+        <option value="">All statuses</option>
+        <option value="unread">Unread</option>
+        <option value="reading">Reading</option>
+        <option value="read">Read</option>
+      </select>
+    </section>
+
+    <p id="stats" class="stats" aria-live="polite"></p>
+    <div id="grid" class="grid"></div>
+    <p id="empty" class="empty hidden">No books here yet — add your first one above!</p>
+  </main>
+
+  <footer class="app-footer">
+    <p>Digital Library &middot; your books are saved in this browser</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
