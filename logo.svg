@@ -22,10 +22,10 @@
   <circle cx="100" cy="105" r="70" fill="white" />
 
   <!-- Open book icon -->
-  <path d="M 70 95 L 70 115 L 80 115 L 80 95 Z" fill="#4A90E2" />
+  <path d="M 70 95 L 70 115 L 80 115 L 80 95 Z" fill="#2E86AB" />
   <path d="M 80 95 L 80 115 L 120 115 L 120 95 Z" fill="#FFFFFF" />
-  <path d="M 90 115 L 90 130 L 110 130 L 110 115 Z" fill="#50C9C3" />
-  <path d="M 120 95 L 120 115 L 130 115 L 130 95 Z" fill="#4A90E2" />
+  <path d="M 90 115 L 90 130 L 110 130 L 110 115 Z" fill="#A23B72" />
+  <path d="M 120 95 L 120 115 L 130 115 L 130 95 Z" fill="#2E86AB" />
 
   <!-- BOW Acronym inside the circle -->
   <text x="100" y="105" text-anchor="middle" font-family="Arial, sans-serif" font-size="36" font-weight="bold" fill="#4A90E2" dominant-baseline="middle">BOW</text>
