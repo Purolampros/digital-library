@@ -1,1 +1,1 @@
-<updated JS content>
+<complete JavaScript content>
