@@ -7,120 +7,60 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="welcome-screen" id="welcomeScreen">
-        <div class="welcome-logo">📚茳</div>
-        <div class="welcome-text">Welcome to Bank of Wisdom</div>
-        <div class="welcome-spinner"></div>
-    </div>
-
-    <div class="login-container" id="loginContainer">
-        <div class="login-header">
-            <h2>Sign In</h2>
-            <p>Enter your username to access your digital library</p>
-        </div>
-        <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" id="username" placeholder="Enter your name..." />
-        </div>
-        <button class="btn" id="loginBtn">Enter Library</button>
-    </div>
-
-    <div class="app-container" id="appContainer">
-        <header class="app-header">
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="Bank of Wisdom Logo"> <!-- You'll need to add your logo file -->
             <h1>Bank of Wisdom</h1>
-            <div class="user-info">
-                <span id="userName" class="user-avatar"></span>
-                <button class="logout-btn" id="logoutBtn">Logout</button>
-            </div>
-        </header>
-
-        <main class="app-content">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="number" id="totalFiles">0</div>
-                    <div class="label">Total Files</div>
-                </div>
-                <div class="stat-card">
-                    <div class="number" id="totalCategories">3</div>
-                    <div class="label">Categories</div>
-                </div>
-                <div class="stat-card">
-                    <div class="number" id="totalSize">0 MB</div>
-                    <div class="label">Total Size</div>
-                </div>
-            </div>
-
-            <div class="search-section">
-                <div class="search-box">
-                    <input type="text" id="searchInput" placeholder="Search files..." />
-                    <button class="btn" id="searchBtn">Search</button>
-                </div>
-                <div class="advanced-search">
-                    <select id="categoryFilter">
-                        <option value="">All Categories</option>
-                        <option value="books">Books</option>
-                        <option value="documents">Documents</option>
-                        <option value="media">Media</option>
-                    </select>
-                    <input type="text" id="authorFilter" placeholder="Author/Creator" />
-                </div>
-            </div>
-
-            <div class="categories-section">
-                <h2 class="section-title">Categories</h2>
-                <div class="categories-grid" id="categoriesGrid">
-                    <div class="category-card active" data-category="">
-                        <div>All Files</div>
-                        <div class="num-items" id="cat-all">0</div>
-                    </div>
-                    <div class="category-card" data-category="books">
-                        <div>Books</div>
-                        <div class="num-items" id="cat-books">0</div>
-                    </div>
-                    <div class="category-card" data-category="documents">
-                        <div>Documents</div>
-                        <div class="num-items" id="cat-docs">0</div>
-                    </div>
-                    <div class="category-card" data-category="media">
-                        <div>Media</div>
-                        <div class="num-items" id="cat-media">0</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="upload-section">
-                <h2 class="section-title">Upload Files</h2>
-                <label class="upload-area" for="fileInput">
-                    <input type="file" id="fileInput" class="file-input" multiple />
-                    <div class="upload-icon">📊</div>
-                    <div class="upload-text">Click to upload files</div>
-                    <div class="upload-hint">No file size limits</div>
-                </label>
-            </div>
-
-            <h2 class="section-title">Your Files</h2>
-            <div class="files-grid" id="filesGrid">
-                <div class="no-files">
-                    <p>No files uploaded yet</p>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <div class="upload-modal" id="previewModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="modalTitle">File Info</h3>
-                <button class="close-modal" id="closeModal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <p id="modalInfo"></p>
-            </div>
-            <div class="modal-actions">
-                <button class="btn" id="downloadModalBtn">Download</button>
-            </div>
         </div>
-    </div>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#books">Books</a></li>
+                <li><a href="#authors">Authors</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h2>Welcome to the Bank of Wisdom</h2>
+            <p>Your digital gateway to knowledge and literature</p>
+            <button class="cta-button">Explore Collection</button>
+        </div>
+    </section>
+
+    <main>
+        <section id="featured">
+            <h2>Featured Books</h2>
+            <div class="book-grid" id="featured-books">
+                <!-- Books will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <section id="genres">
+            <h2>Browse by Genre</h2>
+            <div class="genre-container">
+                <div class="genre-card" onclick="filterByGenre('fiction')
+                    <h3>Fiction</h3>
+                </div>
+                <div class="genre-card" onclick="filterByGenre('nonfiction')">
+                    <h3>Non-Fiction</h3>
+                </div>
+                <div class="genre-card" onclick="filterByGenre('science')">
+                    <h3>Science</h3>
+                </div>
+                <div class="genre-card" onclick="filterByGenre('history')">
+                    <h3>History</h3>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Bank of Wisdom Digital Library</p>
+    </footer>
 
     <script src="app.js"></script>
 </body>
