@@ -238,5 +238,6 @@ function setupEvents() {
 /* ---------- Init ---------- */
 setupWelcome();
 populateSelects();
+setupNavigation();
 setupEvents();
 renderBooks();
