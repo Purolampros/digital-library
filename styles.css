@@ -115,13 +115,13 @@ body {
 }
 
 .bow-letter--b {
-  animation: bow-b-in 0.5s 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation: bow-b-in 2.35s 0.94s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 .bow-letter--o {
-  animation: bow-o-in 0.6s 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation: bow-o-in 2.82s 3.29s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 .bow-letter--w {
-  animation: bow-w-in 0.5s 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation: bow-w-in 2.35s 5.65s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
 @keyframes bow-b-in {
