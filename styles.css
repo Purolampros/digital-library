@@ -310,6 +310,44 @@ body {
   color: #b91c1c;
 }
 
+/* ---------- Navigation Bar ---------- */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Push brand left, nav right */
+  gap: 12px;
+  padding: 20px clamp(16px, 4vw, 32px);
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.nav-list {
+  display: flex;
+  gap: 24px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-link {
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: background-color .2s, color .2s;
+}
+
+.nav-link:hover {
+  background-color: rgba(111, 99, 255, .08);
+  color: var(--accent-dark);
+}
+
+.nav-link.active {
+  background-color: var(--accent);
+  color: #fff;
+}
+
 /* ---------- Footer ---------- */
 .app-footer {
   text-align: center;
