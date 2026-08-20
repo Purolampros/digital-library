@@ -34,39 +34,54 @@
   </header>
 
   <main class="app">
-    <section class="card" aria-labelledby="add-title">
-      <h2 id="add-title" class="section-title">Add a book</h2>
-      <form id="addForm" class="add-form">
-        <input type="text" id="title" placeholder="Book title" required autocomplete="off">
-        <input type="text" id="author" placeholder="Author" required autocomplete="off">
-        <select id="genre" aria-label="Genre">
-          <option value="">Genre…</option>
+    <!-- Home section -->
+    <section class="page" data-page="home" aria-labelledby="add-title">
+      <section class="card">
+        <h2 id="add-title" class="section-title">Add a book</h2>
+        <form id="addForm" class="add-form">
+          <input type="text" id="title" placeholder="Book title" required autocomplete="off">
+          <input type="text" id="author" placeholder="Author" required autocomplete="off">
+          <select id="genre" aria-label="Genre">
+            <option value="">Genre…</option>
+          </select>
+          <select id="status" aria-label="Reading status">
+            <option value="unread">Unread</option>
+            <option value="reading">Reading</option>
+            <option value="read">Read</option>
+          </select>
+          <button type="submit" class="primary">Add book</button>
+        </form>
+      </section>
+    </section>
+
+    <!-- Books section -->
+    <section class="page" data-page="books" hidden>
+      <section class="card controls" aria-label="Search and filter">
+        <input type="search" id="search" placeholder="Search title or author…" aria-label="Search books">
+        <select id="filterGenre" aria-label="Filter by genre">
+          <option value="">All genres</option>
         </select>
-        <select id="status" aria-label="Reading status">
+        <select id="filterStatus" aria-label="Filter by status">
+          <option value="">All statuses</option>
           <option value="unread">Unread</option>
           <option value="reading">Reading</option>
           <option value="read">Read</option>
         </select>
-        <button type="submit" class="primary">Add book</button>
-      </form>
+      </section>
+
+      <p id="stats" class="stats" aria-live="polite"></p>
+      <div id="grid" class="grid"></div>
+      <p id="empty" class="empty hidden">No books here yet — add your first one above!</p>
     </section>
 
-    <section class="card controls" aria-label="Search and filter">
-      <input type="search" id="search" placeholder="Search title or author…" aria-label="Search books">
-      <select id="filterGenre" aria-label="Filter by genre">
-        <option value="">All genres</option>
-      </select>
-      <select id="filterStatus" aria-label="Filter by status">
-        <option value="">All statuses</option>
-        <option value="unread">Unread</option>
-        <option value="reading">Reading</option>
-        <option value="read">Read</option>
-      </select>
+    <!-- About section -->
+    <section class="page" data-page="about" hidden>
+      <section class="card">
+        <h2 class="section-title">About Us</h2>
+        <p>Welcome to Digital Library, your personal book tracking application. Add books, track your reading progress, and organize your library with ease.</p>
+        <p>This app runs entirely in your browser, and your data is saved locally using localStorage.</p>
+      </section>
     </section>
-
-    <p id="stats" class="stats" aria-live="polite"></p>
-    <div id="grid" class="grid"></div>
-    <p id="empty" class="empty hidden">No books here yet — add your first one above!</p>
   </main>
 
   <footer class="app-footer">
