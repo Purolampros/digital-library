@@ -36,6 +36,9 @@ body {
   text-align: center;
   transition: transform .8s cubic-bezier(.55, 0, .3, 1), opacity .8s ease;
 }
+
+/* Hide skip button */
+#skipWelcome { display: none; }
 .welcome.done { transform: translateY(-100%); opacity: 0; }
 .welcome.hidden { display: none; }
 
