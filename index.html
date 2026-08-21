@@ -20,7 +20,23 @@
     </div>
   </div>
 
-  <header class="app-header">
+  <!-- Login overlay (shown when not authenticated) -->
+  <div id="loginOverlay" class="login-overlay hidden" aria-labelledby="loginTitle">
+    <div class="login-card">
+      <h2 id="loginTitle" class="login-title">Login to Digital Library</h2>
+      <div class="login-methods">
+        <button type="button" id="loginGoogle"><span>🔵</span>Continue with Google</button>
+        <button type="button" id="loginApple"><span>🍎</span>Continue with Apple</button>
+        <button type="button" id="loginTwitter"><span>🐦</span>Continue with Twitter</button>
+      </div>
+      <div class="login-divider"><span>Or use API key</span></div>
+      <input type="password" id="apiKey" class="api-key-input" placeholder="Enter your API key" autocomplete="off">
+      <button type="submit" id="loginSubmit" class="login-submit">Log in</button>
+      <div id="loginError" class="login-error"></div>
+    </div>
+  </div>
+
+  <header class="app-header hidden" id="mainHeader">
     <img src="logo.svg" alt="" class="brand-logo">
     <h1 class="brand">Digital Library</h1>
     <nav class="nav" aria-label="Main navigation">
@@ -33,7 +49,7 @@
     </nav>
   </header>
 
-  <main class="app">
+  <main class="app hidden" id="mainApp">
     <!-- Home section -->
     <section class="page" data-page="home" aria-labelledby="add-title">
       <section class="card">
@@ -84,7 +100,7 @@
     </section>
   </main>
 
-  <footer class="app-footer">
+  <footer class="app-footer hidden" id="mainFooter">
     <p>Digital Library &middot; your books are saved in this browser</p>
   </footer>
 
