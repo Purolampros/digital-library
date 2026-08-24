@@ -96,7 +96,7 @@ function setupWelcome() {
   if (reduced) {
     close();
   } else {
-    setTimeout(close, 3800);
+    setTimeout(close, 8500);
   }
 }
 
