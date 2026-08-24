@@ -57,14 +57,22 @@ function setupWelcome() {
   // Build the B-O-W scene dynamically inside .welcome-inner
   const inner = overlay.querySelector(".welcome-inner");
 
+  // Hide existing content (logo, title, tagline) during BOW animation
+  const logo = inner.querySelector(".welcome-logo");
+  const titleEl = inner.querySelector(".welcome-title");
+  const tagline = inner.querySelector(".welcome-tag");
+  if (logo) logo.classList.add("hidden");
+  if (titleEl) titleEl.classList.add("hidden");
+  if (tagline) tagline.classList.add("hidden");
+
   // Create the BOW scene container
   const bowScene = document.createElement("div");
   bowScene.className = "bow-scene";
 
   const letters = [
-    { char: "B", cls: "bow-letter bow-letter--b", delay: 0.2 },
-    { char: "O", cls: "bow-letter bow-letter--o", delay: 0.7 },
-    { char: "W", cls: "bow-letter bow-letter--w", delay: 1.2 },
+    { char: "B", cls: "bow-letter bow-letter--b" },
+    { char: "O", cls: "bow-letter bow-letter--o" },
+    { char: "W", cls: "bow-letter bow-letter--w" },
   ];
 
   letters.forEach(({ char, cls }) => {
@@ -74,19 +82,8 @@ function setupWelcome() {
     bowScene.appendChild(span);
   });
 
-  // Insert BOW scene before the welcome-title
-  const titleEl = inner.querySelector(".welcome-title");
-  inner.insertBefore(bowScene, titleEl);
-
-  // Wrap each letter of the title in a span with staggered delays
-  const titleText = titleEl.textContent;
-  titleEl.textContent = "";
-  [...titleText].forEach((char, i) => {
-    const span = document.createElement("span");
-    span.textContent = char;
-    span.style.animationDelay = (1.6 + i * 0.06) + "s";
-    titleEl.appendChild(span);
-  });
+  // Insert BOW scene at the beginning of welcome-inner
+  inner.prepend(bowScene);
 
   function close() {
     overlay.classList.add("done");
@@ -96,7 +93,7 @@ function setupWelcome() {
   if (reduced) {
     close();
   } else {
-    setTimeout(close, 8500);
+    setTimeout(close, 8000); // Total duration: B(0.94+2.35)=3.29s, O(3.29+2.82)=6.11s, W(5.65+2.35)=8.0s
   }
 }
 
