@@ -87,7 +87,14 @@ function setupWelcome() {
 
   function close() {
     overlay.classList.add("done");
-    setTimeout(() => overlay.classList.add("hidden"), reduced ? 0 : 800);
+    setTimeout(() => {
+      overlay.classList.add("hidden");
+      // Initialize the rest of the app after welcome animation
+      populateSelects();
+      setupNavigation();
+      setupEvents();
+      renderBooks();
+    }, reduced ? 0 : 800);
   }
 
   if (reduced) {
