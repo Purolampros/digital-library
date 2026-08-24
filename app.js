@@ -51,6 +51,9 @@ function setupWelcome() {
   const skipBtn = document.getElementById("skipWelcome");
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  // Hide skip button
+  if (skipBtn) skipBtn.style.display = 'none';
+
   // Build the B-O-W scene dynamically inside .welcome-inner
   const inner = overlay.querySelector(".welcome-inner");
 
@@ -93,11 +96,6 @@ function setupWelcome() {
   if (reduced) {
     close();
   } else {
-    window.addEventListener("pointerdown", () => close(), { once: true });
-    window.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" || e.key === "Enter") close();
-    }, { once: true });
-    skipBtn.addEventListener("click", close);
     setTimeout(close, 3800);
   }
 }
