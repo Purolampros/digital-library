@@ -57,15 +57,13 @@ function setupWelcome() {
   // Build the B-O-W scene dynamically inside .welcome-inner
   const inner = overlay.querySelector(".welcome-inner");
 
-  // Hide existing content (logo, title, tagline) during BOW animation
-  const logo = inner.querySelector(".welcome-logo");
+  // Hide title and tagline during BOW animation (keep logo visible in front)
   const titleEl = inner.querySelector(".welcome-title");
   const tagline = inner.querySelector(".welcome-tag");
-  if (logo) logo.classList.add("hidden");
   if (titleEl) titleEl.classList.add("hidden");
   if (tagline) tagline.classList.add("hidden");
 
-  // Create the BOW scene container
+  // Create the BOW scene container (positioned absolutely over logo)
   const bowScene = document.createElement("div");
   bowScene.className = "bow-scene";
 
@@ -82,7 +80,7 @@ function setupWelcome() {
     bowScene.appendChild(span);
   });
 
-  // Insert BOW scene at the beginning of welcome-inner
+  // Insert BOW scene at the beginning of welcome-inner (will overlay the logo)
   inner.prepend(bowScene);
 
   function close() {

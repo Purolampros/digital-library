@@ -42,12 +42,20 @@ body {
 .welcome.done { transform: translateY(-100%); opacity: 0; }
 .welcome.hidden { display: none; }
 
-.welcome-inner { padding: 0 24px; }
+.welcome-inner { 
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
 .welcome-logo {
   width: 124px;
   height: 124px;
   opacity: 0;
   animation: logo-in .7s .1s ease forwards;
+  position: relative;
+  z-index: 5;
 }
 .welcome-title {
   color: #fff;
@@ -94,14 +102,18 @@ body {
 
 /* ---------- BOW welcome animation ---------- */
 .bow-scene {
-  position: relative;
+  position: absolute;
   display: flex;
   justify-content: center;
-  align-items: baseline;
+  align-items: center;
   gap: 0.04em;
   min-height: 2.4em;
   filter: drop-shadow(0 14px 18px rgba(0, 0, 0, 0.45));
   user-select: none;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
 }
 
 .bow-letter {
