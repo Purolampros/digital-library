@@ -62,10 +62,44 @@
     if (!response.ok) throw new Error(`File cleanup failed (${response.status})`);
   }
 
-  function saveOAuthSessionFromUrl() {
+  function base64Url(bytes) {
+    return btoa(String.fromCharCode(...new Uint8Array(bytes)))
+      .replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  }
+
+  async function createPkcePair() {
+    const verifier = base64Url(crypto.getRandomValues(new Uint8Array(64)));
+    const digest = await crypto.subtle.digest(
+      "SHA-256",
+      new TextEncoder().encode(verifier)
+    );
+    return { verifier, challenge: base64Url(digest) };
+  }
+
+  async function saveOAuthSessionFromUrl() {
     const params = new URLSearchParams(window.location.hash.replace(/^#/, ""));
     const accessToken = params.get("access_token");
     const refreshToken = params.get("refresh_token");
+    const code = new URLSearchParams(window.location.search).get("code");
+
+    if (code) {
+      const verifier = sessionStorage.getItem("supabase.pkce_verifier");
+      if (!verifier) return false;
+      const response = await fetch(`${baseUrl}/auth/v1/token?grant_type=pkce`, {
+        method: "POST",
+        headers: headers(),
+        body: JSON.stringify({ auth_code: code, code_verifier: verifier })
+      });
+      if (!response.ok) throw new Error(`OAuth session exchange failed (${response.status})`);
+      const session = await response.json();
+      localStorage.setItem("supabase.access_token", session.access_token);
+      localStorage.setItem("supabase.refresh_token", session.refresh_token);
+      localStorage.setItem("auth.token", session.access_token);
+      sessionStorage.removeItem("supabase.pkce_verifier");
+      window.history.replaceState({}, document.title, window.location.pathname);
+      return true;
+    }
+
     if (!accessToken) return false;
 
     localStorage.setItem("supabase.access_token", accessToken);
@@ -79,12 +113,16 @@
     enabled,
     auth: {
       restoreSession: saveOAuthSessionFromUrl,
-      signInWithProvider(provider) {
+      async signInWithProvider(provider) {
         if (!enabled) throw new Error("Supabase is not configured.");
+        const { verifier, challenge } = await createPkcePair();
+        sessionStorage.setItem("supabase.pkce_verifier", verifier);
         const redirectTo = `${window.location.origin}${window.location.pathname}`;
         const authorizeUrl = new URL(`${baseUrl}/auth/v1/authorize`);
         authorizeUrl.searchParams.set("provider", provider);
         authorizeUrl.searchParams.set("redirect_to", redirectTo);
+        authorizeUrl.searchParams.set("code_challenge", challenge);
+        authorizeUrl.searchParams.set("code_challenge_method", "s256");
         window.location.assign(authorizeUrl.toString());
       }
     },
