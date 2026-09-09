@@ -1316,10 +1316,11 @@ body {
   border-color: var(--accent);
 }
 
-.login-methods img {
+.provider-icon {
   width: 22px;
   height: 22px;
   margin-right: 8px;
+  flex: 0 0 auto;
 }
 
 .login-divider {
