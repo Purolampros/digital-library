@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Browse and manage your Bank of Wisdom book collection.">
+  <title>Books | Bank of Wisdom</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="books-page">
+  <header class="app-header book-page-header">
+    <a class="book-brand" href="index.html" aria-label="Bank of Wisdom home">
+      <img src="logo.svg" alt="" class="brand-logo">
+      <span>Bank of Wisdom</span>
+    </a>
+    <nav class="nav" aria-label="Main navigation">
+      <ul class="nav-list">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="book.html" class="nav-link active">Books</a></li>
+        <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+      </ul>
+    </nav>
+    <a class="book-exit" href="index.html">Exit</a>
+  </header>
+
+  <main class="book-page-main">
+    <section class="books-heading">
+      <div>
+        <p class="books-eyebrow">Your collection</p>
+        <h1 class="books-title">The Wisdom Shelf</h1>
+        <p class="book-page-intro">Search, filter, and revisit the ideas that shape your journey.</p>
+      </div>
+      <button type="button" class="primary add-book-button" id="openAddBook">Add a book</button>
+    </section>
+
+    <section class="card controls" aria-label="Search and filter books">
+      <input type="search" id="bookSearch" placeholder="Search title or author…" aria-label="Search books">
+      <select id="bookGenre" aria-label="Filter by genre">
+        <option value="">All genres</option>
+      </select>
+      <select id="bookStatus" aria-label="Filter by status">
+        <option value="">All statuses</option>
+        <option value="unread">Unread</option>
+        <option value="reading">Reading</option>
+        <option value="read">Read</option>
+      </select>
+      <select id="bookSort" aria-label="Sort books">
+        <option value="newest">Newest added</option>
+        <option value="title">Title A–Z</option>
+        <option value="author">Author A–Z</option>
+        <option value="status">Reading status</option>
+      </select>
+    </section>
+
+    <p id="bookStats" class="stats" aria-live="polite"></p>
+    <div id="bookGrid" class="grid"></div>
+    <p id="bookEmpty" class="empty hidden">No books match your search.</p>
+  </main>
+
+    <div class="book-modal hidden" id="addBookModal" role="dialog" aria-modal="true" aria-labelledby="addBookTitle">
+      <form class="book-modal-card add-book-form" id="addBookForm">
+        <button type="button" class="modal-close" id="closeAddBook" aria-label="Close add book form">×</button>
+        <p class="books-eyebrow">New entry</p>
+        <h2 id="addBookTitle">Add a book</h2>
+        <input type="text" id="newBookTitle" placeholder="Book title" required>
+        <input type="text" id="newBookAuthor" placeholder="Author" required>
+        <select id="newBookGenre" required aria-label="Book genre"></select>
+        <select id="newBookStatus" required aria-label="Reading status">
+          <option value="unread">Unread</option>
+          <option value="reading">Reading</option>
+          <option value="read">Read</option>
+        </select>
+        <button type="submit" class="primary">Save book</button>
+        <p class="form-error hidden" id="addBookError" role="alert"></p>
+      </form>
+    </div>
+
+  <footer class="app-footer">
+    <p>Bank of Wisdom · your books are saved in this browser</p>
+  </footer>
+
+  <script src="supabase-config.js"></script>
+  <script src="database.js"></script>
+  <script>
+    const GENRES = ["Fiction", "Science Fiction", "Fantasy", "Mystery", "Biography", "History", "Science", "Technology", "Self-Help", "Poetry", "Other"];
+    const STATUS_LABELS = { unread: "Unread", reading: "Reading", read: "Read" };
+    let books = JSON.parse(localStorage.getItem("digital-library.books") || "[]");
+    const genreSelect = document.getElementById("bookGenre");
+    const newBookGenre = document.getElementById("newBookGenre");
+
+    GENRES.forEach((genre) => {
+      const option = document.createElement("option");
+      option.value = genre;
+      option.textContent = genre;
+      genreSelect.appendChild(option);
+      newBookGenre.appendChild(option.cloneNode(true));
+    });
+
+    function renderBooks() {
+      const query = document.getElementById("bookSearch").value.trim().toLowerCase();
+      const genre = genreSelect.value;
+      const status = document.getElementById("bookStatus").value;
+      const sort = document.getElementById("bookSort").value;
+      const filtered = books.filter((book) => {
+        const matchesQuery = !query || book.title.toLowerCase().includes(query) || book.author.toLowerCase().includes(query);
+        return matchesQuery && (!genre || book.genre === genre) && (!status || book.status === status);
+      });
+
+      filtered.sort((a, b) => {
+        if (sort === "title") return a.title.localeCompare(b.title);
+        if (sort === "author") return a.author.localeCompare(b.author);
+        if (sort === "status") return a.status.localeCompare(b.status);
+        return books.indexOf(a) - books.indexOf(b);
+      });
+
+      const grid = document.getElementById("bookGrid");
+      grid.innerHTML = "";
+      filtered.forEach((book) => {
+        const card = document.createElement("article");
+        card.className = "book";
+        const cover = document.createElement("div");
+        cover.className = "book-cover cover-" + ((Math.max(0, GENRES.indexOf(book.genre)) % 5) + 1);
+        cover.textContent = book.title.slice(0, 1).toUpperCase();
+        const title = document.createElement("h2");
+        title.className = "book-title";
+        title.textContent = book.title;
+        const author = document.createElement("p");
+        author.className = "book-author";
+        author.textContent = "by " + book.author;
+        const meta = document.createElement("div");
+        meta.className = "book-meta";
+        meta.textContent = `${book.genre || "No genre"} · ${STATUS_LABELS[book.status] || "Unread"}`;
+        card.append(cover, title, author, meta);
+        grid.appendChild(card);
+      });
+
+      document.getElementById("bookEmpty").classList.toggle("hidden", filtered.length > 0);
+      document.getElementById("bookStats").textContent = `${filtered.length} of ${books.length} books shown`;
+    }
+
+    ["bookSearch", "bookGenre", "bookStatus", "bookSort"].forEach((id) => {
+      document.getElementById(id).addEventListener(id === "bookSearch" ? "input" : "change", renderBooks);
+    });
+
+    const addBookModal = document.getElementById("addBookModal");
+    document.getElementById("openAddBook").addEventListener("click", () => {
+      addBookModal.classList.remove("hidden");
+      document.getElementById("newBookTitle").focus();
+    });
+    document.getElementById("closeAddBook").addEventListener("click", () => {
+      addBookModal.classList.add("hidden");
+    });
+    addBookModal.addEventListener("click", (event) => {
+      if (event.target === addBookModal) addBookModal.classList.add("hidden");
+    });
+    document.getElementById("addBookForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const title = document.getElementById("newBookTitle").value.trim();
+      const author = document.getElementById("newBookAuthor").value.trim();
+      const genre = newBookGenre.value;
+      const status = document.getElementById("newBookStatus").value;
+      const error = document.getElementById("addBookError");
+      const book = { title, author, genre, status };
+      const submit = event.currentTarget.querySelector("button[type='submit']");
+
+      submit.disabled = true;
+      error.classList.add("hidden");
+      try {
+        if (window.bookDatabase.enabled) {
+          const saved = await window.bookDatabase.insert(book);
+          books.unshift((saved && saved[0]) || book);
+        } else {
+          books.unshift(book);
+          localStorage.setItem("digital-library.books", JSON.stringify(books));
+        }
+        event.currentTarget.reset();
+        addBookModal.classList.add("hidden");
+        renderBooks();
+      } catch (requestError) {
+        console.error("Could not save the book.", requestError);
+        error.textContent = "The book could not be saved. Please try again.";
+        error.classList.remove("hidden");
+      } finally {
+        submit.disabled = false;
+      }
+    });
+
+    if (window.bookDatabase.enabled) {
+      window.bookDatabase.list().then((remoteBooks) => {
+        books = remoteBooks || [];
+        renderBooks();
+      }).catch((error) => {
+        console.error("Could not load the shared book catalog.", error);
+        renderBooks();
+      });
+    } else {
+      renderBooks();
+    }
+  </script>
+</body>
+</html>
