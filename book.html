@@ -70,6 +70,9 @@
           <option value="reading">Reading</option>
           <option value="read">Read</option>
         </select>
+        <label class="file-upload-label" for="newBookFile">Book file <span>(PDF, EPUB, TXT, DOC, or DOCX)</span></label>
+        <input type="file" id="newBookFile" accept=".pdf,.epub,.txt,.doc,.docx,application/pdf,text/plain,application/epub+zip,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+        <p class="file-upload-help">Upload the actual book file so it can be opened from the shelf.</p>
         <button type="submit" class="primary">Save book</button>
         <p class="form-error hidden" id="addBookError" role="alert"></p>
       </form>
@@ -131,6 +134,15 @@
         meta.className = "book-meta";
         meta.textContent = `${book.genre || "No genre"} · ${STATUS_LABELS[book.status] || "Unread"}`;
         card.append(cover, title, author, meta);
+        if (book.file_url) {
+          const fileLink = document.createElement("a");
+          fileLink.className = "book-file-link";
+          fileLink.href = book.file_url;
+          fileLink.target = "_blank";
+          fileLink.rel = "noopener";
+          fileLink.textContent = "Open book file";
+          card.appendChild(fileLink);
+        }
         grid.appendChild(card);
       });
 
@@ -159,6 +171,7 @@
       const author = document.getElementById("newBookAuthor").value.trim();
       const genre = newBookGenre.value;
       const status = document.getElementById("newBookStatus").value;
+      const file = document.getElementById("newBookFile").files[0];
       const error = document.getElementById("addBookError");
       const book = { title, author, genre, status };
       const submit = event.currentTarget.querySelector("button[type='submit']");
@@ -167,7 +180,7 @@
       error.classList.add("hidden");
       try {
         if (window.bookDatabase.enabled) {
-          const saved = await window.bookDatabase.insert(book);
+          const saved = await window.bookDatabase.insert(book, file);
           books.unshift((saved && saved[0]) || book);
         } else {
           books.unshift(book);

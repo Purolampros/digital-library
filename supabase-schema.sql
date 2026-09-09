@@ -5,11 +5,25 @@ create table if not exists public.books (
   genre text not null default 'Other',
   status text not null default 'unread'
     check (status in ('unread', 'reading', 'read')),
+  file_name text,
+  file_path text,
+  file_url text,
+  file_type text,
+  file_size bigint,
   created_at timestamptz not null default now()
 );
 
+alter table public.books
+  add column if not exists file_name text,
+  add column if not exists file_path text,
+  add column if not exists file_url text,
+  add column if not exists file_type text,
+  add column if not exists file_size bigint;
+
 alter table public.books enable row level security;
 
+drop policy if exists "Anyone can read books" on public.books;
+drop policy if exists "Anyone can add books" on public.books;
 create policy "Anyone can read books"
   on public.books for select
   using (true);
@@ -17,3 +31,22 @@ create policy "Anyone can read books"
 create policy "Anyone can add books"
   on public.books for insert
   with check (true);
+
+insert into storage.buckets (id, name, public)
+values ('books', 'books', true)
+on conflict (id) do update set public = true;
+
+drop policy if exists "Anyone can read book files" on storage.objects;
+drop policy if exists "Anyone can upload book files" on storage.objects;
+drop policy if exists "Anyone can delete book files" on storage.objects;
+create policy "Anyone can read book files"
+  on storage.objects for select
+  using (bucket_id = 'books');
+
+create policy "Anyone can upload book files"
+  on storage.objects for insert
+  with check (bucket_id = 'books');
+
+create policy "Anyone can delete book files"
+  on storage.objects for delete
+  using (bucket_id = 'books');
