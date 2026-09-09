@@ -427,6 +427,10 @@ function setupEvents() {
 /* ---------- Init ---------- */
 let isLoggedIn = false;
 
+if (window.bookDatabase && window.bookDatabase.auth) {
+  window.bookDatabase.auth.restoreSession();
+}
+
 function checkAuth() {
   const savedAuth = localStorage.getItem("auth.token");
   return !!savedAuth;
@@ -466,6 +470,18 @@ function setupLogin() {
     loginOverlay.classList.remove("hidden");
   }
 
+  loginGoogle.addEventListener("click", () => {
+    showError("");
+    setLoadingState(loginGoogle, true);
+    try {
+      window.bookDatabase.auth.signInWithGoogle();
+    } catch (error) {
+      console.error("Could not start Google sign-in.", error);
+      setLoadingState(loginGoogle, false);
+      showError("Google sign-in is not configured yet.");
+    }
+  });
+
   function simulateAuth(provider) {
     setLoadingState(loginSubmit, true);
     setTimeout(() => {
@@ -483,11 +499,6 @@ function setupLogin() {
       showError("");
     }, 2000);
   }
-
-  loginGoogle.addEventListener("click", () => {
-    showError("");
-    simulateAuth("google");
-  });
 
   loginApple.addEventListener("click", () => {
     showError("");

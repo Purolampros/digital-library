@@ -62,8 +62,32 @@
     if (!response.ok) throw new Error(`File cleanup failed (${response.status})`);
   }
 
+  function saveOAuthSessionFromUrl() {
+    const params = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+    const accessToken = params.get("access_token");
+    const refreshToken = params.get("refresh_token");
+    if (!accessToken) return false;
+
+    localStorage.setItem("supabase.access_token", accessToken);
+    if (refreshToken) localStorage.setItem("supabase.refresh_token", refreshToken);
+    localStorage.setItem("auth.token", accessToken);
+    window.history.replaceState({}, document.title, `${window.location.pathname}${window.location.search}`);
+    return true;
+  }
+
   window.bookDatabase = {
     enabled,
+    auth: {
+      restoreSession: saveOAuthSessionFromUrl,
+      signInWithGoogle() {
+        if (!enabled) throw new Error("Supabase is not configured.");
+        const redirectTo = `${window.location.origin}${window.location.pathname}`;
+        const authorizeUrl = new URL(`${baseUrl}/auth/v1/authorize`);
+        authorizeUrl.searchParams.set("provider", "google");
+        authorizeUrl.searchParams.set("redirect_to", redirectTo);
+        window.location.assign(authorizeUrl.toString());
+      }
+    },
     async list() {
       return request({ method: "GET" }) || [];
     },
