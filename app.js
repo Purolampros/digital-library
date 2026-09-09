@@ -474,13 +474,25 @@ function setupLogin() {
     showError("");
     setLoadingState(loginGoogle, true);
     try {
-      window.bookDatabase.auth.signInWithGoogle();
+      window.bookDatabase.auth.signInWithProvider("google");
     } catch (error) {
       console.error("Could not start Google sign-in.", error);
       setLoadingState(loginGoogle, false);
       showError("Google sign-in is not configured yet.");
     }
   });
+
+  function startProviderSignIn(button, provider, label) {
+    showError("");
+    setLoadingState(button, true);
+    try {
+      window.bookDatabase.auth.signInWithProvider(provider);
+    } catch (error) {
+      console.error(`Could not start ${label} sign-in.`, error);
+      setLoadingState(button, false);
+      showError(`${label} sign-in is not configured yet.`);
+    }
+  }
 
   function simulateAuth(provider) {
     setLoadingState(loginSubmit, true);
@@ -501,13 +513,11 @@ function setupLogin() {
   }
 
   loginApple.addEventListener("click", () => {
-    showError("");
-    simulateAuth("apple");
+    startProviderSignIn(loginApple, "apple", "Apple");
   });
 
   loginTwitter.addEventListener("click", () => {
-    showError("");
-    simulateAuth("twitter");
+    startProviderSignIn(loginTwitter, "twitter", "X");
   });
 
   signInButton.addEventListener("click", openLogin);

@@ -28,7 +28,9 @@ The current policies make the catalog and uploaded files public. Add authenticat
 3. Add the Supabase callback URL shown in Supabase to the Google OAuth authorized redirect URIs.
 4. Add the GitHub Pages URL (`https://purolampros.github.io/digital-library/`) to Supabase Authentication URL Configuration as an allowed redirect URL.
 
-After this setup, **Continue with Google** redirects to Google and returns to the library with the authenticated session.
+For Apple and X, enable the corresponding providers in Supabase and add their credentials and callback settings. Supabase uses the provider name `twitter` for X's OAuth configuration.
+
+After this setup, **Continue with Google**, **Continue with Apple**, and **Continue with X** redirect to the provider and return to the library with the authenticated session.
 
 ## Files
 | File | Purpose |

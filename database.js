@@ -79,11 +79,11 @@
     enabled,
     auth: {
       restoreSession: saveOAuthSessionFromUrl,
-      signInWithGoogle() {
+      signInWithProvider(provider) {
         if (!enabled) throw new Error("Supabase is not configured.");
         const redirectTo = `${window.location.origin}${window.location.pathname}`;
         const authorizeUrl = new URL(`${baseUrl}/auth/v1/authorize`);
-        authorizeUrl.searchParams.set("provider", "google");
+        authorizeUrl.searchParams.set("provider", provider);
         authorizeUrl.searchParams.set("redirect_to", redirectTo);
         window.location.assign(authorizeUrl.toString());
       }
