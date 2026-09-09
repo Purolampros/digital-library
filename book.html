@@ -90,6 +90,7 @@
     let books = JSON.parse(localStorage.getItem("digital-library.books") || "[]");
     const genreSelect = document.getElementById("bookGenre");
     const newBookGenre = document.getElementById("newBookGenre");
+    const oauthSession = window.bookDatabase.auth.restoreSession();
 
     GENRES.forEach((genre) => {
       const option = document.createElement("option");
@@ -199,7 +200,7 @@
     });
 
     if (window.bookDatabase.enabled) {
-      window.bookDatabase.list().then((remoteBooks) => {
+      oauthSession.then(() => window.bookDatabase.list()).then((remoteBooks) => {
         books = remoteBooks || [];
         renderBooks();
       }).catch((error) => {

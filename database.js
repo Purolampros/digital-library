@@ -117,7 +117,7 @@
         if (!enabled) throw new Error("Supabase is not configured.");
         const { verifier, challenge } = await createPkcePair();
         sessionStorage.setItem("supabase.pkce_verifier", verifier);
-        const redirectTo = `${window.location.origin}${window.location.pathname}`;
+        const redirectTo = new URL("book.html", window.location.href).href;
         const authorizeUrl = new URL(`${baseUrl}/auth/v1/authorize`);
         authorizeUrl.searchParams.set("provider", provider);
         authorizeUrl.searchParams.set("redirect_to", redirectTo);
