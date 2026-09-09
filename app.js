@@ -428,7 +428,9 @@ function setupEvents() {
 let isLoggedIn = false;
 
 if (window.bookDatabase && window.bookDatabase.auth) {
-  window.bookDatabase.auth.restoreSession();
+  window.bookDatabase.auth.restoreSession().catch((error) => {
+    console.error("Could not restore the OAuth session.", error);
+  });
 }
 
 function checkAuth() {
@@ -485,25 +487,21 @@ function setupLogin() {
   loginGoogle.addEventListener("click", () => {
     showError("");
     setLoadingState(loginGoogle, true);
-    try {
-      window.bookDatabase.auth.signInWithProvider("google");
-    } catch (error) {
+    window.bookDatabase.auth.signInWithProvider("google").catch((error) => {
       console.error("Could not start Google sign-in.", error);
       setLoadingState(loginGoogle, false);
       showError("Google sign-in is not configured yet.");
-    }
+    });
   });
 
   function startProviderSignIn(button, provider, label) {
     showError("");
     setLoadingState(button, true);
-    try {
-      window.bookDatabase.auth.signInWithProvider(provider);
-    } catch (error) {
+    window.bookDatabase.auth.signInWithProvider(provider).catch((error) => {
       console.error(`Could not start ${label} sign-in.`, error);
       setLoadingState(button, false);
       showError(`${label} sign-in is not configured yet.`);
-    }
+    });
   }
 
   function simulateAuth(provider) {
