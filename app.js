@@ -464,10 +464,22 @@ function setupLogin() {
   }
 
   function openLogin() {
+    if (checkAuth()) {
+      logout();
+      return;
+    }
     showError("");
     usernameInput.value = "";
     passwordInput.value = "";
     loginOverlay.classList.remove("hidden");
+  }
+
+  function updateAuthControls() {
+    const signedIn = checkAuth();
+    signInButton.textContent = signedIn ? "Sign out" : "Sign in";
+    mobileSignInButton.textContent = signedIn ? "Sign out" : "Sign in";
+    signInButton.setAttribute("aria-label", signedIn ? "Sign out of your account" : "Sign in");
+    mobileSignInButton.setAttribute("aria-label", signedIn ? "Sign out of your account" : "Sign in");
   }
 
   loginGoogle.addEventListener("click", () => {
@@ -507,6 +519,7 @@ function setupLogin() {
       populateSelects();
       setupEvents();
       renderBooks();
+      updateAuthControls();
       setLoadingState(loginSubmit, false);
       showError("");
     }, 2000);
@@ -548,8 +561,11 @@ function setupLogin() {
       setupEvents();
       renderBooks();
       setLoadingState(loginSubmit, false);
+      updateAuthControls();
     }, 2000);
   });
+
+  updateAuthControls();
 }
 
 let navigationInitialized = false;
@@ -633,6 +649,12 @@ function setupNavigation() {
 
 function logout() {
   localStorage.removeItem("auth.token");
+  localStorage.removeItem("supabase.access_token");
+  localStorage.removeItem("supabase.refresh_token");
+  const signInButton = document.getElementById("signInButton");
+  const mobileSignInButton = document.getElementById("mobileSignInButton");
+  if (signInButton) signInButton.textContent = "Sign in";
+  if (mobileSignInButton) mobileSignInButton.textContent = "Sign in";
   isLoggedIn = false;
   document.getElementById("mainHeader").classList.add("hidden");
   document.getElementById("mainApp").classList.add("hidden");
